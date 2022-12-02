@@ -13,10 +13,13 @@ import { getCart, getTotal } from "../redux/feature/cartSlide";
 import { RootState } from "../redux/store";
 import { ShoppingBagIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
 type HomeProps = {
   categories: Category[];
   products: Product[];
+  session: Session | null;
 };
 
 const Home = ({ categories, products }: HomeProps) => {
@@ -27,7 +30,6 @@ const Home = ({ categories, products }: HomeProps) => {
     const data = localStorage.getItem("cart");
     if (data) {
       dispatch(getCart(JSON.parse(data)));
-      dispatch(getTotal());
     }
   }, [dispatch]);
 
@@ -76,10 +78,13 @@ const Home = ({ categories, products }: HomeProps) => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  context
+) => {
   const categories: Category[] = await fetchCategories();
   const products: Product[] = await fetchProducts();
+  const session = await getSession(context);
   return {
-    props: { categories, products },
+    props: { categories, products, session },
   };
 };

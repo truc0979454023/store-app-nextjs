@@ -19,7 +19,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`group relative z-30 box-border inline-flex ease-out ${
+      className={`group relative box-border inline-flex ease-out ${
         width ? width : "w-auto"
       } ${padding} cursor-pointer items-center justify-center rounded bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-3 font-bold text-white transition-all duration-300  focus:outline-none`}
       onClick={onClick}

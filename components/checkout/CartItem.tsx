@@ -1,8 +1,12 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getTotal, removeToCart } from "../../redux/feature/cartSlide";
+import {
+  addQuantityItem,
+  prevQuantityItem,
+  removeToCart,
+} from "../../redux/feature/cartSlide";
 import { urlFor } from "../../sanity";
 
 type CartItemProps = {
@@ -14,11 +18,18 @@ const CartItem = ({ cartItem }: CartItemProps) => {
 
   const remove = () => {
     dispatch(removeToCart(cartItem));
-    dispatch(getTotal);
+  };
+
+  const prevItem = () => {
+    dispatch(prevQuantityItem(cartItem));
+  };
+
+  const addItem = () => {
+    dispatch(addQuantityItem(cartItem));
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-start border-b border-gray-300 p-2 sm:flex-row  sm:justify-center lg:w-3/4">
+    <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-start border-b border-gray-300 p-4 sm:flex-row  sm:justify-center lg:w-3/4">
       <div className="relative h-52 w-52">
         <Image
           src={urlFor(cartItem.image[0]).url()}
@@ -41,13 +52,19 @@ const CartItem = ({ cartItem }: CartItemProps) => {
           </div>
           <span className="flex items-center gap-x-1 text-lg font-semibold lg:text-xl">
             <div className="flex flex-col items-center justify-center">
-              <ChevronUpIcon className="h-6 w-6 cursor-pointer text-blue-500"></ChevronUpIcon>
+              <ChevronUpIcon
+                onClick={addItem}
+                className="h-6 w-6 cursor-pointer text-blue-500"
+              ></ChevronUpIcon>
               {cartItem.quantity}
-              <ChevronDownIcon className="h-6 w-6 cursor-pointer text-blue-500"></ChevronDownIcon>
+              <ChevronDownIcon
+                onClick={prevItem}
+                className="h-6 w-6 cursor-pointer text-blue-500"
+              ></ChevronDownIcon>
             </div>
           </span>
-          <div className="">
-            <h4 className="text-lg font-semibold lg:text-xl">
+          <div>
+            <h4 className="text-end text-lg font-semibold lg:text-xl">
               $ {cartItem.price * cartItem.quantity}
             </h4>
 

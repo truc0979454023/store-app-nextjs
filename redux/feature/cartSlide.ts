@@ -36,6 +36,19 @@ export const cartSlice = createSlice({
       )),
         localStorage.setItem("cart", JSON.stringify(state.items));
     },
+    prevQuantityItem: (state: CartState, action: PayloadAction<CartItem>) => {
+      state.items.forEach((item) => {
+        if (item._id === action.payload._id)
+          if (item.quantity > 1) item.quantity = item.quantity - 1;
+      });
+      localStorage.setItem("cart", JSON.stringify(state.items));
+    },
+    addQuantityItem: (state: CartState, action: PayloadAction<CartItem>) => {
+      state.items.forEach((item) => {
+        if (item._id === action.payload._id) item.quantity = item.quantity + 1;
+      });
+      localStorage.setItem("cart", JSON.stringify(state.items));
+    },
     getTotal: (state: CartState) => {
       state.total = state.items.reduce(
         (total, item) => (total += item.price * item.quantity),
@@ -46,6 +59,13 @@ export const cartSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { getCart, addToCart, removeToCart, getTotal } = cartSlice.actions;
+export const {
+  getCart,
+  addToCart,
+  removeToCart,
+  getTotal,
+  prevQuantityItem,
+  addQuantityItem,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
